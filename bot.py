@@ -8,7 +8,7 @@ from writetitul import write_titul
 from pocessinginfile import process_document
 import time as tm
 from datetime import date
-token = '6295000781:AAHo4pljJ1GmkRXRier4-ckD16n8sD5rCjo'
+token = ''
 bot = telebot.TeleBot(token)
 
 
