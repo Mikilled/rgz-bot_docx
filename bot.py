@@ -8,7 +8,7 @@ from writetitul import write_titul
 from pocessinginfile import process_document
 import time as tm
 from datetime import date
-token = ''
+token = '6295000781:AAHo4pljJ1GmkRXRier4-ckD16n8sD5rCjo'
 bot = telebot.TeleBot(token)
 
 
@@ -96,12 +96,15 @@ def actions(message):
 
 @bot.message_handler(content_types=['document'])
 def handle_document(message):
-    if not is_spam(message.chat.id, spams, 1, 15, 10, "Отправлять можно раз в "):
-        return
+    # if is_spam(message.chat.id, spams, 1, 15, 10, "Отправлять можно раз в "):
+    #     return
     file_id = message.document.file_id
     file_info = bot.get_file(file_id)
     file_path = file_info.file_path
-
+    print(message.document.file_name)
+    if message.document.file_name.split('.')[-1] != 'docx':
+        bot.send_message(message.chat.id, 'это не docx документ')
+        return
 
     downloaded_file = bot.download_file(file_path)
     print(message.chat.username)
@@ -124,7 +127,7 @@ def handle_document(message):
         print("Записал титул")
     except Exception as e:
         print(e)
-        bot.send_message(message.chat.id, 'Ошибка запис')
+        bot.send_message(message.chat.id, 'Ошибка записи')
         del_files(message.document.file_id)
         return
 
