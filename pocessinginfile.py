@@ -142,7 +142,8 @@ def process_document(doc_path,cout):
                         errors.append("У таблицы было обнаружено отсутствие номера")
                     last_block.text = f'Таблица {count_table} - ' + last_block.text
 
-
+            last_row = None
+            prev_row = None
             for i, row in enumerate(block.rows):
                 for j, cell in enumerate(row.cells):
                     if cell.paragraphs:
@@ -152,13 +153,19 @@ def process_document(doc_path,cout):
                             if i == 0:
                                 cell.paragraphs[0].runs[0].font.bold = True
                                 cell.paragraphs[0].paragraph_format.keep_with_next = True
+                prev_row = last_row
+                last_row = row
+            if prev_row is not None:
+                for cell in prev_row.cells:
+                    if cell.paragraphs and cell.paragraphs[0].runs:
+                        cell.paragraphs[0].paragraph_format.keep_with_next = True
         last_block = block
     return  doc,errors
     #new_doc.save(out_path)
 
 if __name__ == '__main__':
-    count, info = pars_titul(r"C:\Users\admin\Downloads\pr2_final.docx")
-    new_doc = process_document(r"C:\Users\admin\Downloads\pr2_final.docx",count)
+    count, info = pars_titul(r"docx/pr2_final.docx")
+    new_doc,err = process_document(r"docx/pr2_final.docx",count)
     new_doc.save(r"docx/2222.docx")
     doc = write_titul("docx/testwrite.docx",info)
     doc.save('docx/testwrite.docx')
